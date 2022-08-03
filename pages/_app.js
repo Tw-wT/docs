@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import { Provider } from "react-redux"
 import { store } from "../app/redux"
 import "../styles/index.scss"
-import MainLayout from "../components/MainLayout/MainLayout"
+import MainLayout from "../app/components/MainLayout/MainLayout"
 
 
 function MyApp({ Component, pageProps }) {
