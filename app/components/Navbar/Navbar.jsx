@@ -1,13 +1,53 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { useDispatch, useSelector } from "react-redux"
+import { useRouter } from "next/router"
+import {logout, reset} from "../../../features/auth/authSlice"
+import Link from "next/link"
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
+	const { user, isLoading, isError, isSuccess, message } = useSelector(
+		(state) => state.auth
+	)
+
+	const dispatch = useDispatch()
+
+	const onLogout = () => {
+		dispatch(logout())
+		dispatch(reset())
+	}
+
+	let userIsNotAuth = true
+
+	if (typeof window !== 'undefined') {
+		const router = useRouter()
+		const isNotLoginOrRegistrPage = window.location.pathname !== "/auth/login" && window.location.pathname !== "/auth/registration"
+		userIsNotAuth = !user || !user.access_token
+
+
+		if (userIsNotAuth && isNotLoginOrRegistrPage) {
+			router.push('/auth/login')
+		}
+	}
+
+	const menuItemsObj = [
+		{
+			path: userIsNotAuth ? "/auth/login" : "/profile",
+			value: userIsNotAuth ? "Войти" : "Профиль"
+		},
+		{
+			path: userIsNotAuth ? "/auth/registration" : "/logout",
+			value: userIsNotAuth ? "Регистрация" : "Выйти"
+		}
+	]
+
+
 	return (
 		<Disclosure as="nav" className="bg-gray-800">
 			{({ open }) => (
@@ -17,7 +57,6 @@ export default function Navbar() {
 							<div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
 								{/* Mobile menu button*/}
 								<Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-									<span className="sr-only">Open main menu</span>
 									{open ? (
 										<XIcon className="block h-6 w-6" aria-hidden="true" />
 									) : (
@@ -41,10 +80,9 @@ export default function Navbar() {
 								<Menu as="div" className="ml-3 relative">
 									<div>
 										<Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-											<span className="sr-only">Open user menu</span>
 											<img
 												className="h-8 w-8 rounded-full"
-												src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+												src={`http://192.168.0.203:8787${user?.foto_url ||'/upload/img_profile/default.jpg'}`}
 												alt=""
 											/>
 										</Menu.Button>
@@ -59,26 +97,16 @@ export default function Navbar() {
 										leaveTo="transform opacity-0 scale-95"
 									>
 										<Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-											<Menu.Item>
-												{({ active }) => (
-													<a
-														href="#"
-														className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-													>
-														Ваш профиль
-													</a>
-												)}
-											</Menu.Item>	
-											<Menu.Item>
-												{({ active }) => (
-													<a
-														href="#"
-														className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-													>
-														Выйти
-													</a>
-												)}
-											</Menu.Item>
+
+											{menuItemsObj.map(item => (
+												<Menu.Item>
+													{({ active }) => (
+														item.path === "/logout" ? <button onClick={onLogout} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700 cursor-pointer')}>{item.value}</button>
+														:
+														<Link href={item.path}><a className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>{item.value}</a></Link>
+													)}
+												</Menu.Item>
+											))}
 										</Menu.Items>
 									</Transition>
 								</Menu>

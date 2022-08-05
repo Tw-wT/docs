@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Editor from '../../components/Editor/Editor'
+import Editor from '../../app/components/Editor/Editor'
 import { useGetArticlesQuery, useAddArticleMutation } from '../../app/redux'
 import { useState } from "react"
 import { Button } from "react-md"

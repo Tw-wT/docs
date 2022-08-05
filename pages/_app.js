@@ -5,8 +5,13 @@ import "../styles/index.scss"
 import MainLayout from "../app/components/MainLayout/MainLayout"
 
 
+
 function MyApp({ Component, pageProps }) {
-  return <Provider store={store}><MainLayout><Component {...pageProps} /></MainLayout></Provider>
+  return (
+    <Provider store={store}><MainLayout>
+      <Component {...pageProps} />
+    </MainLayout></Provider>
+  )
 }
 
 export default MyApp

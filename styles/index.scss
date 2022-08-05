@@ -1,3 +1,5 @@
 @use "react-md" as *;
 
 @include react-md-utils;
+
+$--rmd-form-text-active-color: 'black';

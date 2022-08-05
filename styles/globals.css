@@ -35,3 +35,18 @@ a {
     width: 350px;
   }
 }
+
+
+.rmd-text-field-container--outline::after {
+  box-shadow: 0 0 0 2px #6366f1 !important;
+}
+
+.rmd-floating-label {
+  --rmd-form-active-color: #6366f1 !important;
+  /* background-color: whitesmoke !important; */
+}
+
+.links a:hover {
+  transition-duration: 0.2s;
+  color:#6366f1;
+}
