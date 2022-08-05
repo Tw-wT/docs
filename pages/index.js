@@ -1,31 +1,39 @@
 import Editor from '../app/components/Editor/Editor'
-import { useState } from "react"
-import { createArticle } from "../features/articles/articlesSlice"
+import { useEffect, useState } from "react"
+import { createArticle, getArticles } from "../features/articles/articlesSlice"
 import { useSelector, useDispatch } from "react-redux"
 
 export default function Home() {
 
   const dispatch = useDispatch()
-  const { user, articles, isLoading, isError, isSuccess, message } = useSelector(
+  const { articles, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.articles
   )
+  const { user } = useSelector(
+    (state) => state.auth
+  )
 
-  // const [articleCreated, createArticle] = useState()
-
-  if (isLoading) return <h1>Loading</h1>
+  useEffect(() => {
+    const articlesFromDB = dispatch(getArticles(user.access_token))
+    console.log(articlesFromDB)
+  }, [isSuccess])
 
   const onSaveHandler = async (blogData, title, description) => {
-
     const toSaveData = {
       title,
       blogData,
-      description,
+      description
+    }
+
+    const result = {
+      article: toSaveData,
+      access_token: user.access_token
     }
 
     // console.log(toSaveData)
     //make your ajax call to send the data to your server and save it in a database
 
-    dispatch(createArticle(toSaveData))
+    dispatch(createArticle(result))
   }
 
   return (

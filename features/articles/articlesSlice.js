@@ -1,14 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import articlesService from "./articlesService"
 
-let user
 
-if (typeof window !== 'undefined') {
-	user = JSON.parse(localStorage.getItem('user'))
-}
+
 
 const initialState = {
-	user: user ? user : null,
 	articles: null,
 	isError: false,
 	isSuccess: false,
@@ -16,10 +12,18 @@ const initialState = {
 	message: ''
 }
 
-export const createArticle = createAsyncThunk('articles/create', async (article, thunkAPI) => {
+export const createArticle = createAsyncThunk('articles/create', async (data, thunkAPI) => {
 	try {
-		return await articlesService.create(article, user?.access_token)
+		return await articlesService.create(data.article, data.access_token)
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
+		return thunkAPI.rejectWithValue(message)
+	}
+})
 
+export const getArticles = createAsyncThunk('articles', async (token) => {
+	try {
+		return await articlesService.getArticles(token)
 	} catch (error) {
 		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
 		return thunkAPI.rejectWithValue(message)
