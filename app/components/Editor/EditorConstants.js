@@ -23,7 +23,17 @@ const constants = {
   warning: Warning,
   code: Code,
   linkTool: LinkTool,
-  image: Image,
+  image: {
+    class: Image,
+    config: {
+      endpoints: {
+        byFile: 'http://192.168.0.203:8787/upload',
+      },
+      additionalRequestHeaders: {
+        'mode': 'cors',
+      }
+    }
+  },
   raw: Raw,
   header: Header,
   quote: Quote,

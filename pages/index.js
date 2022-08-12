@@ -1,7 +1,12 @@
 import Editor from '../app/components/Editor/Editor'
 import { useEffect, useState } from "react"
-import { createArticle, getArticles } from "../features/articles/articlesSlice"
+import { createArticle, getArticles, getGroups } from "../features/articles/articlesSlice"
 import { useSelector, useDispatch } from "react-redux"
+import { reset, logout } from "../features/auth/authSlice"
+import Loader from "../app/components/Loader/Loader"
+import { getDepartaments } from "../features/departaments/departamentsSlice"
+import LeftMenu from "../app/components/LeftMenu/LeftMenu"
+
 
 export default function Home() {
 
@@ -9,20 +14,27 @@ export default function Home() {
   const { articles, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.articles
   )
+
   const { user } = useSelector(
     (state) => state.auth
   )
 
   useEffect(() => {
-    const articlesFromDB = dispatch(getArticles(user.access_token))
-    console.log(articlesFromDB)
+    const data = {
+      token: user?.access_token,
+      departament_id: 1
+    }
+    dispatch(getGroups(data))
+    dispatch(getDepartaments(user?.access_token))
+    dispatch(getArticles(user?.access_token))
   }, [isSuccess])
 
   const onSaveHandler = async (blogData, title, description) => {
     const toSaveData = {
       title,
       blogData,
-      description
+      description,
+      group_id: 1
     }
 
     const result = {
@@ -30,22 +42,33 @@ export default function Home() {
       access_token: user.access_token
     }
 
-    // console.log(toSaveData)
-    //make your ajax call to send the data to your server and save it in a database
+    let test = dispatch(createArticle(result))
+    test.then(res => {
+      console.log(res)
+      if (res.payload.error && res.payload.statusCode === 401) {
+        dispatch(logout())
+        dispatch(reset())
+      }
 
-    dispatch(createArticle(result))
+    })
   }
 
   return (
-
     <div>
-      {/* {articleCreated && <div>Заметка создана</div>} */}
-      <h1>Создать заметку</h1>
-      <Editor
-        onSave={(editorData, title, description) =>
-          onSaveHandler(editorData, title, description)
-        }
-      />
+
+      {isLoading && <Loader />}
+      <div className="flex">
+        <div className="w-1/4">
+          <LeftMenu />
+        </div>
+        <Editor
+          onSave={(editorData, title, description) =>
+            onSaveHandler(editorData, title, description)
+          }
+        />
+      </div>
+
+
     </div>
   )
 }

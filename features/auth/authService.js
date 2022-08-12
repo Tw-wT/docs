@@ -1,15 +1,8 @@
-import axios from 'axios'
-
-const API_URL = 'http://192.168.0.203:8787/'
-
-const headers = {
-	'content-type': 'application/json',
-	'mode': 'cors'
-}
+import instance from "../../app/store/axios/instance"
 
 //register user
 const register = async (userData) => {
-	const response = await axios.post(`${API_URL}registration`, userData, headers)
+	const response = await instance.post(`registration`, userData)
 
 	if (response.data) {
 		localStorage.setItem('user', JSON.stringify(response.data))
@@ -20,7 +13,7 @@ const register = async (userData) => {
 
 //login user
 const login = async (userData) => {
-	const response = await axios.post(`${API_URL}login`, {}, {
+	const response = await instance.post(`login`, {}, {
 		auth: {
 			username: userData.email,
 			password: userData.password

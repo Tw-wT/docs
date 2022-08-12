@@ -1,16 +1,12 @@
-import axios from "axios"
+import instance from "../../app/store/axios/instance"
 
-const API_URL = 'http://192.168.0.203:8787/'
+// instance.defaults.baseURL = "http://192.168.0.203:8787/api/v1/book/"
 
-const headers = {
-	'content-type': 'application/json',
-	'mode': 'cors'
-}
+const API_URL = "api/v1/book/"
 
 const create = async (article, token) => {
-	const response = await axios.post(`${API_URL}`, article, {
+	const response = await instance.post(`${API_URL}article`, article, {
 		headers: {
-			...headers,
 			'Authorization': `Bearer ${token}`
 		}
 	})
@@ -18,20 +14,33 @@ const create = async (article, token) => {
 }
 
 const getArticles = async (token) => {
-	const response = await axios.get(`${API_URL}`, {
+	const response = await instance.get(`${API_URL}article`, {
+		params: {
+			group_id: 1
+		},
 		headers: {
-			...headers,
 			'Authorization': `Bearer ${token}`
 		}
 	})
-	console.log("response")
-	console.log(response.data)
+	return response.data
+}
+
+const getGroups = async (token, departament_id) => {
+	const response = await instance.get(`${API_URL}group-article`, {
+		params: {
+			departament_id: departament_id
+		},
+		headers: {
+			'Authorization': `Bearer ${token}`
+		}
+	})
 	return response.data
 }
 
 const articlesService = {
 	create,
-	getArticles
+	getArticles,
+	getGroups
 }
 
 export default articlesService

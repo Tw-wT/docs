@@ -7,6 +7,11 @@ import { useEffect } from "react"
 import Link from "next/link"
 
 const LoginPage = () => {
+	const dispatch = useDispatch()
+	let test = ""
+	const { user, isLoading, isError, isSuccess, message } = useSelector(
+		(state) => state.auth
+	)
 
 	const [formData, setFormData] = useState({
 		email: '',
@@ -15,20 +20,12 @@ const LoginPage = () => {
 
 	const { email, password } = formData
 
-	console.log(formData)
-
 	const onChange = (e) => {
 		setFormData((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
 		}))
 	}
-
-	const dispatch = useDispatch()
-
-	const { user, isLoading, isError, isSuccess, message } = useSelector(
-		(state) => state.auth
-	)
 
 	useEffect(() => {
 		if (isError) {

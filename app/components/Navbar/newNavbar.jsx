@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { Disclosure, Menu, Transition } from "@headlessui/react"
 import { MenuIcon, XIcon } from "@heroicons/react/outline"
 import { useDispatch, useSelector } from "react-redux"
@@ -16,6 +16,10 @@ export default function Navbar() {
 		(state) => state.auth
 	)
 
+	const [menuItemsObj, setMenuItemsObj] = useState([])
+	// console.log(setMenuItemsObj)
+
+
 	const dispatch = useDispatch()
 
 	const onLogout = () => {
@@ -23,31 +27,36 @@ export default function Navbar() {
 		dispatch(reset())
 	}
 
-	let userIsNotAuth = true
+	// console.log(user)
+
+
+
+	useEffect(() => {
+		console.log(user)
+		setMenuItemsObj([
+			{
+				path: user.access_token ? "/auth/login" : "/profile",
+				value: user.access_token ? "Войти" : "Профиль"
+			},
+			{
+				path: user.access_token ? "/auth/registration" : "/logout",
+				value: user.access_token ? "Регистрация" : "Выйти"
+			}
+		])
+	}, [isLoading])
+
 
 	if (typeof window !== "undefined") {
 		const router = useRouter()
 		const isNotLoginOrRegistrPage = window.location.pathname !== "/auth/login" && window.location.pathname !== "/auth/registration"
-		userIsNotAuth = !user || !user.access_token
-
-
-		if (userIsNotAuth && isNotLoginOrRegistrPage) {
-			router.push("/auth/login")
-		} else if (!userIsNotAuth && !isNotLoginOrRegistrPage) {
+		const userIsNotAuth = !user || !user.access_token
+		
+		if (!userIsNotAuth && !isNotLoginOrRegistrPage) {
 			router.push("/")
 		}
 	}
 
-	const menuItemsObj = [
-		{
-			path: userIsNotAuth ? "/auth/login" : "/profile",
-			value: userIsNotAuth ? "Войти" : "Профиль"
-		},
-		{
-			path: userIsNotAuth ? "/auth/registration" : "/logout",
-			value: userIsNotAuth ? "Регистрация" : "Выйти"
-		}
-	]
+	// console.log(menuItemsObj)
 
 	return (
 		<Disclosure as="nav" className="bg-gray-800">
@@ -83,7 +92,7 @@ export default function Navbar() {
 										<Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
 											<img
 												className="h-8 w-8 rounded-full"
-												src={`http://192.168.0.203:8787/${user?.foto_url || "/upload/img-profile/default.jpg"}`}
+												src={`http://192.168.0.203:8787${user?.foto_url || "/upload/img-profile/default.jpg"}`}
 												alt=""
 											/>
 										</Menu.Button>
@@ -99,7 +108,7 @@ export default function Navbar() {
 									>
 										<Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
 
-											{menuItemsObj.map(item => (
+											{menuItemsObj?.map(item => (
 												<Menu.Item>
 													{({ active }) => (
 														item.path === "/logout" ? <button onClick={onLogout} className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700 cursor-pointer")}>{item.value}</button>
