@@ -34,6 +34,7 @@ export default function Navbar() {
 		if (userIsNotAuth && isNotLoginOrRegistrPage) {
 			router.push("/auth/login")
 		} else if (!userIsNotAuth && !isNotLoginOrRegistrPage) {
+			// console.log(user)
 			router.push("/")
 		}
 	}

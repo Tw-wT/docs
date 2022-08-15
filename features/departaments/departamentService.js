@@ -1,11 +1,7 @@
 import instance from "../../app/store/axios/instance"
 
-const get = async (token) => {
-	const response = await instance.get(`departament`, {
-		headers: {
-			'Authorization': `Bearer ${token}`
-		}
-	})
+const get = async () => {
+	const response = await instance.get(`departament`)
 	return response.data
 }
 

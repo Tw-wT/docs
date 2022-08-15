@@ -3,45 +3,15 @@ import {
 	useTreeItemExpansion,
 	useTreeItemSelection,
 } from "@react-md/tree"
-import { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-
-let folders = {
-	"folder-1": {
-		name: "Folder 1",
-		itemId: "folder-1",
-		parentId: null,
-	},
-	"folder-2": {
-		name: "Folder 2",
-		itemId: "folder-2",
-		parentId: null,
-	},
-	"folder-3": {
-		name: "Folder 3",
-		itemId: "folder-3",
-		parentId: null,
-	},
-	"folder-2-1": {
-		name: "Folder 2 Child 1",
-		itemId: "folder-2-1",
-		parentId: "folder-2",
-	},
-	"folder-2-2": {
-		name: "Folder 2 Child 2",
-		itemId: "folder-2-2",
-		parentId: "folder-2",
-	},
-	"folder-2-3": {
-		name: "Folder 2 Child 3",
-		itemId: "folder-2-3",
-		parentId: "folder-2",
-	},
-}
+import Loader from "../Loader/Loader"
 
 export default function LeftMenu() {
+
 	const selection = useTreeItemSelection([], false)
 	const expansion = useTreeItemExpansion([])
+	const [folders, setFolders] = useState({})
 
 	selection.onItemSelect = (item) => {
 		console.log(item)
@@ -51,20 +21,52 @@ export default function LeftMenu() {
 		(state) => state.departaments
 	)
 
+	const { user } = useSelector((state) => state.auth)
+	// console.log(user)
+
 	useEffect(() => {
-		departaments?.map(departament => {
-			console.log(departament)
-		})
+		let newArr = {}
+		if (user) {
+			departaments?.map(departament => {
+				setFolders()
+				newArr[`${departament.name}`] = {
+					name: departament.name,
+					itemId: `${departament.name}`,
+					parentId: null
+				}
+				setFolders(newArr)
+				departament.groups && departament.groups.map(group => {
+					newArr[`${group.name}`] = {
+						name: group.name,
+						itemId: `${group.name}`,
+						parentId: `${departament.name}`
+					}
+					setFolders(newArr)
+				})
+			})
+		}
+
 	}, [isSuccess])
 
 	return (
-		<Tree
-			id="single-select-tree"
-			aria-label="Tree"
-			data={folders}
-			{...selection}
-			{...expansion}
-		/>
+		<>
+
+			{Object.keys(folders).length !== 0 ?
+				<div className="w-1/4 mr-5">
+					<Tree
+						id="single-select-tree"
+						aria-label="Tree"
+						data={folders}
+						inputMode="text"
+						{...selection}
+						{...expansion}
+					/>
+				</div>
+				:
+				""
+			}
+
+		</>
 	)
 }
 

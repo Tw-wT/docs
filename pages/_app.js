@@ -4,8 +4,12 @@ import { store } from "../app/store"
 import "../styles/index.scss"
 import MainLayout from "../app/components/MainLayout/MainLayout"
 import { Configuration } from "@react-md/layout"
+import { injectStore } from "../app/store/axios/instance"
 
 function MyApp({ Component, pageProps }) {
+  //inject store in axios
+  injectStore(store)
+  
   return (
     <Provider store={store}>
       <MainLayout>

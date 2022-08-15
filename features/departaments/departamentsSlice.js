@@ -9,9 +9,9 @@ const initialState = {
 	message: ''
 }
 
-export const getDepartaments = createAsyncThunk('departaments', async (token, thunkAPI) => {
+export const getDepartaments = createAsyncThunk('departaments', async ( thunkAPI) => {
 	try {
-		return await departamentsService.get(token)
+		return await departamentsService.get()
 	} catch (error) {
 		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
 		return thunkAPI.rejectWithValue(message)

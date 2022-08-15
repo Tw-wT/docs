@@ -24,11 +24,11 @@ function RegistrationForm() {
 
 	useEffect(() => {
 		if (isError) {
-			console.log(message)
+			// console.log(message)
 		}
 
 		if (isSuccess || user) {
-			console.log("success")
+			// console.log("success")
 		}
 
 	}, [user, isError, isSuccess, message, dispatch])

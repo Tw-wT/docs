@@ -8,7 +8,7 @@ import Link from "next/link"
 
 const LoginPage = () => {
 	const dispatch = useDispatch()
-	let test = ""
+	
 	const { user, isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
 	)
@@ -29,11 +29,11 @@ const LoginPage = () => {
 
 	useEffect(() => {
 		if (isError) {
-			console.log(message)
+			// console.log(message)
 		}
 
 		if (isSuccess || user) {
-			console.log("success")
+			// console.log("success")
 		}
 
 	}, [user, isError, isSuccess, message, dispatch])
