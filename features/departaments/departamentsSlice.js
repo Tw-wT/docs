@@ -27,6 +27,11 @@ export const departamentsSlice = createSlice({
 			state.isError = false
 			state.isSuccess = false
 			state.message = ''
+		},
+		clearData: (state) => {
+			state.isLoading = false
+			state.isSuccess = true
+			state.departaments = null
 		}
 	},
 	extraReducers: (builder) => {
@@ -48,5 +53,5 @@ export const departamentsSlice = createSlice({
 	}
 })
 
-export const { reset } = departamentsSlice.actions
+export const { reset, clearData } = departamentsSlice.actions
 export default departamentsSlice.reducer

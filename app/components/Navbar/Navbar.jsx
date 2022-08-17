@@ -3,7 +3,7 @@ import { Fragment } from "react"
 import { Disclosure, Menu, Transition } from "@headlessui/react"
 import { MenuIcon, XIcon } from "@heroicons/react/outline"
 import { useDispatch, useSelector } from "react-redux"
-import { useRouter } from "next/router"
+import Router, { useRouter } from "next/router"
 import { logout, reset } from "../../../features/auth/authSlice"
 import Link from "next/link"
 
@@ -21,6 +21,7 @@ export default function Navbar() {
 	const onLogout = () => {
 		dispatch(logout())
 		dispatch(reset())
+		Router.push("/auth/login")
 	}
 
 	let userIsNotAuth = true
@@ -30,11 +31,7 @@ export default function Navbar() {
 		const isNotLoginOrRegistrPage = window.location.pathname !== "/auth/login" && window.location.pathname !== "/auth/registration"
 		userIsNotAuth = !user || !user.access_token
 
-
-		if (userIsNotAuth && isNotLoginOrRegistrPage) {
-			router.push("/auth/login")
-		} else if (!userIsNotAuth && !isNotLoginOrRegistrPage) {
-			// console.log(user)
+		if (!userIsNotAuth && !isNotLoginOrRegistrPage) {
 			router.push("/")
 		}
 	}
@@ -73,7 +70,7 @@ export default function Navbar() {
 										src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
 										alt="Workflow"
 									/>
-									<span className="font-medium leading-tight text-3xl h-8 mt-0 ml-2 mb-2 text-white" >Багирапедия</span>
+									<Link href="/"><a className="font-medium leading-tight text-3xl h-8 mt-0 ml-2 mb-2 text-white" >Багирапедия</a></Link>
 
 								</div>
 							</div>
@@ -103,7 +100,7 @@ export default function Navbar() {
 											{menuItemsObj.map(item => (
 												<Menu.Item>
 													{({ active }) => (
-														item.path === "/logout" ? <button onClick={onLogout} className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700 cursor-pointer")}>{item.value}</button>
+														item.path === "/logout" ? <Link href="#"><a onClick={onLogout} className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700")}>{item.value}</a></Link>
 															:
 															<Link href={item.path}><a className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700")}>{item.value}</a></Link>
 													)}

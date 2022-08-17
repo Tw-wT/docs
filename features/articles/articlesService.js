@@ -7,17 +7,18 @@ const create = async (article) => {
 	return response.data
 }
 
-const getArticles = async () => {
+const getArticles = async (groupId = null, departamentId = null) => {
 	const response = await instance.get(`${API_URL}article`, {
 		params: {
-			group_id: 1
+			group_id: groupId ? groupId : null,
+			departament_id: departamentId ? departamentId : null
 		}
 	})
 	return response.data
 }
 
 const getArticle = async (id) => {
-	const response = await instance.get(`${API_URL}aricle/${id}`)
+	const response = await instance.get(`${API_URL}article/${id}`)
 
 	return response.data
 }

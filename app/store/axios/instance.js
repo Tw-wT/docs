@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useRouter } from "next/router"
+import Router from "next/router"
 
 const instance = axios.create({
 	baseURL: 'http://192.168.0.203:8787/',
@@ -9,14 +9,14 @@ const instance = axios.create({
 	}
 })
 
-let store 
+let store
 export const injectStore = _store => {
 	store = _store
 }
 
 instance.interceptors.request.use(config => {
 	let token = store.getState().auth.user?.access_token
-	if(token) {
+	if (token) {
 		config.headers.authorization = `Bearer ${token}`
 	}
 	return config
@@ -26,8 +26,7 @@ instance.interceptors.response.use((response) => {
 	return response
 }, (error) => {
 	if (error.response.status === 401) {
-		const router = useRouter()
-		return router.push('/auth/login')
+		Router.push('/auth/logout')
 	}
 	return Promise.reject(error)
 })

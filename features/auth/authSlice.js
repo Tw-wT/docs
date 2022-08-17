@@ -37,9 +37,9 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
 })
 
 //Logout user
-export const logout = createAsyncThunk('auth/logout', async () => {
-	await authService.logout()
-})
+// export const logout = createAsyncThunk('auth/logout', async () => {
+// 	await authService.logout()
+// })
 
 export const authSlice = createSlice({
 	name: 'auth',
@@ -50,6 +50,10 @@ export const authSlice = createSlice({
 			state.isError = false
 			state.isSuccess = false
 			state.message = ''
+		},
+		logout: (state) => {
+			state.user = null
+			localStorage.removeItem('user')
 		}
 	},
 	extraReducers: (builder) => {
@@ -82,23 +86,8 @@ export const authSlice = createSlice({
 				state.message = action.payload
 				state.user = null
 			})
-			.addCase(logout.pending, state => {
-				state.isLoading = true
-			})
-			.addCase(logout.fulfilled, (state) => {
-				state.isLoading = false
-				state.isError = false
-				state.isSuccess = true
-				state.user = null
-			})
-			.addCase(logout.rejected, (state, action) => {
-				state.isLoading = false
-				state.isError = true
-				state.message = action.payload
-			})
-
 	}
 })
 
-export const { reset } = authSlice.actions
+export const { reset, logout } = authSlice.actions
 export default authSlice.reducer

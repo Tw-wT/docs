@@ -3,6 +3,7 @@ import articlesService from "./articlesService"
 
 const initialState = {
 	articles: null,
+	article: null,
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -24,15 +25,23 @@ export const createArticle = createAsyncThunk('articles/create', async (data, th
 	}
 })
 
-export const getArticles = createAsyncThunk('articles', async (thunkAPI) => {
+export const getArticles = createAsyncThunk('articles', async (data, thunkAPI) => {
 	try {
-		return await articlesService.getArticles()
+		return await articlesService.getArticles(data.groupId, data.departamentId)
 	} catch (error) {
 		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
 		return thunkAPI.rejectWithValue(message)
 	}
 })
 
+export const getArticle = createAsyncThunk('article', async (id, thunkAPI) => {
+	try {
+		return await articlesService.getArticle(id)
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
+		return thunkAPI.rejectWithValue(message)
+	}
+})
 
 export const articlesSlice = createSlice({
 	name: 'articles',
@@ -44,6 +53,10 @@ export const articlesSlice = createSlice({
 			state.isSuccess = false
 			state.message = ''
 		},
+		clearData: (state) => {
+			state.article = null,
+			state.articles = null
+		}
 	},
 	extraReducers: (builder) => {
 		builder
@@ -66,7 +79,7 @@ export const articlesSlice = createSlice({
 			.addCase(getArticles.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = true
-				state.articles = action.payload
+				state.articles = action.payload 
 			})
 			.addCase(getArticles.rejected, (state, action) => {
 				state.isLoading = false
@@ -74,8 +87,21 @@ export const articlesSlice = createSlice({
 				state.message = action.payload
 				state.articles = null
 			})
+			.addCase(getArticle.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(getArticle.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+				state.article = action.payload
+			})
+			.addCase(getArticle.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.message = action.payload
+			})
 	}
 })
 
-export const { reset } = articlesSlice.actions
+export const { reset, clearData } = articlesSlice.actions
 export default articlesSlice.reducer

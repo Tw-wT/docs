@@ -4,9 +4,11 @@ import dynamic from 'next/dynamic'
 import { TextIconSpacing } from "@react-md/icon"
 import { Button } from "@react-md/button"
 import { CircularProgress, getProgressA11y } from "@react-md/progress"
-import { useTimeout, useToggle } from "@react-md/utils"
-import { StarSVGIcon, SaveSVGIcon } from "@react-md/material-icons"
+import { useToggle } from "@react-md/utils"
+import { SaveSVGIcon } from "@react-md/material-icons"
 import { TextField } from "@react-md/form"
+import { clearData } from "../../../features/articles/articlesSlice"
+import { useDispatch } from "react-redux"
 
 const EditorJs = dynamic(() => import('react-editor-js'), { ssr: false })
 
@@ -19,6 +21,7 @@ const Editor = (props) => {
   const [loading, enable, disable] = useToggle(false)
   const id = "button-with-progress"
   const progressId = `${id}-loading`
+  const dispatch = useDispatch()
 
   const onSaveHandler = async (editorInstance) => {
     enable()
@@ -51,7 +54,9 @@ const Editor = (props) => {
               "Warning": "Блок внимание",
               "Code": "Код",
               "Delimiter": "Разделитель",
-              "Image": "Изображение"
+              "Image": "Изображение",
+              "Raw HTML": "HTML",
+              "Checklist": "Список чекбоксов"
 
             },
             "tools": {
@@ -85,6 +90,8 @@ const Editor = (props) => {
             }
           }
         }}
+
+        data={props.blogData}
         instanceRef={(instance) => (editorInstance = instance)}
         tools={editorTools}
         placeholder={`Давайте создадим какую-то запись!`}
@@ -105,7 +112,13 @@ const Editor = (props) => {
     if (loading) {
       enable()
     }
+
+
+
   }, [loading])
+  useEffect(() => {
+    dispatch(clearData())
+  }, [])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

@@ -1,73 +1,90 @@
-import {
-	Tree,
-	useTreeItemExpansion,
-	useTreeItemSelection,
-} from "@react-md/tree"
-import React, { useEffect, useState } from "react"
+import { Tree, useTreeItemExpansion, useTreeItemSelection } from "@react-md/tree"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import Loader from "../Loader/Loader"
+import { useDispatch } from "react-redux"
+import { getArticles, reset } from "../../../features/articles/articlesSlice"
+import { getDepartaments } from "../../../features/departaments/departamentsSlice"
 
-export default function LeftMenu() {
-
+const LeftMenu = () => {
 	const selection = useTreeItemSelection([], false)
+	const dispatch = useDispatch()
 	const expansion = useTreeItemExpansion([])
 	const [folders, setFolders] = useState({})
-
-	selection.onItemSelect = (item) => {
-		console.log(item)
-	}
 
 	const { departaments, isLoading, isSuccess, isError } = useSelector(
 		(state) => state.departaments
 	)
 
 	const { user } = useSelector((state) => state.auth)
-	// console.log(user)
+
+	selection.onItemSelect = (item) => {
+
+		if (Number(item)) {
+			let data = {
+				groupId: item,
+				departamentId: null
+			}
+			dispatch(getArticles(data))
+		} else {
+			let departamentId = departaments.filter((el) => {
+				return el.name == item
+			})[0].id
+			let data = {
+				groupId: null,
+				departamentId
+			}
+			dispatch(getArticles(data))
+			dispatch(reset())
+		}
+	}
+
+	useEffect(() => {
+		dispatch(getDepartaments())
+	}, [])
 
 	useEffect(() => {
 		let newArr = {}
 		if (user) {
 			departaments?.map(departament => {
-				setFolders()
 				newArr[`${departament.name}`] = {
 					name: departament.name,
 					itemId: `${departament.name}`,
+					id: departament.id,
 					parentId: null
 				}
 				setFolders(newArr)
 				departament.groups && departament.groups.map(group => {
-					newArr[`${group.name}`] = {
+					newArr[`${group.id}`] = {
 						name: group.name,
-						itemId: `${group.name}`,
-						parentId: `${departament.name}`
+						itemId: `${group.id}`,
+						id: departament.id,
+						parentId: `${departament.name}`,
+
 					}
 					setFolders(newArr)
 				})
 			})
+		} else {
+			setFolders({ newArr })
 		}
-
 	}, [isSuccess])
+
 
 	return (
 		<>
-
-			{Object.keys(folders).length !== 0 ?
-				<div className="w-1/4 mr-5">
-					<Tree
-						id="single-select-tree"
-						aria-label="Tree"
-						data={folders}
-						inputMode="text"
-						{...selection}
-						{...expansion}
-					/>
-				</div>
+			{user ?
+				<Tree
+					id="single-select-tree"
+					aria-label="Tree"
+					data={folders} 
+					style={{ maxWidth: "20%", marginRight: "20px" }}
+					{...selection}
+					{...expansion}
+				/>
 				:
-				""
-			}
-
+				""}
 		</>
 	)
 }
 
-// export default LeftMenu
+export default LeftMenu

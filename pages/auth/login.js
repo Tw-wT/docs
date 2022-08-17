@@ -2,16 +2,20 @@ import { Form, TextField } from "@react-md/form"
 import { Button } from "@react-md/button"
 import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { login, reset } from "../../features/auth/authSlice"
+import { login, reset, logout } from "../../features/auth/authSlice"
 import { useEffect } from "react"
 import Link from "next/link"
 
 const LoginPage = () => {
 	const dispatch = useDispatch()
-	
+
 	const { user, isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
 	)
+	
+	if(user) {
+		// dispatch(logout())
+	}
 
 	const [formData, setFormData] = useState({
 		email: '',
