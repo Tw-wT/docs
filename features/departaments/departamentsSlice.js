@@ -9,11 +9,12 @@ const initialState = {
 	message: ''
 }
 
-export const getDepartaments = createAsyncThunk('departaments', async ( thunkAPI) => {
+//* Получить список департаментов
+export const getDepartaments = createAsyncThunk('departaments', async (args, thunkAPI) => {
 	try {
 		return await departamentsService.get()
 	} catch (error) {
-		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
+		const message = (error.response && error.response.data && error.response.data.msg) || error.message || error
 		return thunkAPI.rejectWithValue(message)
 	}
 })

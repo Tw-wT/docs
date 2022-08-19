@@ -13,7 +13,6 @@ const Article = () => {
 	const { article, isLoading, isSuccess, isError } = useSelector((state) => state.articles)
 
 	const { id } = router.query
-	// console.log(article.blogData.blocks)
 	useEffect(() => {
 		if (id) {
 			dispatch(getArticle(id))

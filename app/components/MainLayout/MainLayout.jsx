@@ -1,16 +1,32 @@
 import Navbar from "../Navbar/Navbar"
+import { useSelector, useDispatch } from "react-redux"
+import { useEffect, useState } from "react"
+import { reset } from "../../../features/auth/authSlice"
+import toast, { Toaster } from "react-hot-toast"
 
 const MainLayout = ({ children }) => {
+	const dispatch = useDispatch()
+
+	const { auth, departaments, articles } = useSelector((state) => state)
+
+	useEffect(() => {
+		let message = auth.message || departaments.message || articles.message
+
+		if (departaments.isError || articles.isError || auth.isError) {
+			toast.error(message)
+		}
+
+		dispatch(reset())
+	}, [auth, departaments, articles])
 	return (
 		<>
-			<Navbar />
-			<div className="flex mt-5 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+			{/* <Navbar /> */}
+			<div className="flex shadow-2xl rounded-3xl" style={{ height: "800px", backgroundColor: "white" }}>
 				{children}
 			</div>
-
+			<Toaster />
 		</>
 	)
-
 }
 
 export default MainLayout

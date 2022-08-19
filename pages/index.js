@@ -19,17 +19,16 @@ export default function Home() {
 
   return (
     <>
-      <LeftMenu />
-      <div className="flex">
+      <LeftMenu />      
+      <Editor />
+
         {/* <Editor
           onSave={(editorData, title, description) =>
             onSaveHandler(editorData, title, description)
           }
         /> */}
-        <div>
-          <ArticlesList />
-        </div>
-      </div>
+        
+
     </>
   )
 }

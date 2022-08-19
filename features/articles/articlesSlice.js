@@ -10,6 +10,7 @@ const initialState = {
 	message: ''
 }
 
+//* Создать запись
 export const createArticle = createAsyncThunk('articles/create', async (data, thunkAPI) => {
 	try {
 		return await articlesService.create(data.article)
@@ -25,6 +26,7 @@ export const createArticle = createAsyncThunk('articles/create', async (data, th
 	}
 })
 
+//* Получить записи по группе или по отедлу (один из параметров всегда null)
 export const getArticles = createAsyncThunk('articles', async (data, thunkAPI) => {
 	try {
 		return await articlesService.getArticles(data.groupId, data.departamentId)
@@ -34,6 +36,7 @@ export const getArticles = createAsyncThunk('articles', async (data, thunkAPI) =
 	}
 })
 
+//* Получить запись по id
 export const getArticle = createAsyncThunk('article', async (id, thunkAPI) => {
 	try {
 		return await articlesService.getArticle(id)

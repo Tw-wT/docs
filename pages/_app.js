@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import "primeicons/primeicons.css"
 import { Provider } from "react-redux"
 import { store } from "../app/store"
 import "../styles/index.scss"
@@ -15,7 +16,7 @@ function MyApp({ Component, pageProps }) {
       <MainLayout>
         <Configuration>
           <Component {...pageProps} />
-
+          
         </Configuration>
       </MainLayout>
     </Provider>

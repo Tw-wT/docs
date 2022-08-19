@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { register, reset } from "../../features/auth/authSlice"
 import { useEffect } from "react"
 import Link from "next/link"
+import toast, { Toaster } from "react-hot-toast"
 
 function RegistrationForm() {
 	const [formData, setFormData] = useState({
@@ -17,21 +18,6 @@ function RegistrationForm() {
 	const { name, email, password } = formData
 
 	const dispatch = useDispatch()
-
-	const { user, isLoading, isError, isSuccess, message } = useSelector(
-		(state) => state.auth
-	)
-
-	useEffect(() => {
-		if (isError) {
-			// console.log(message)
-		}
-
-		if (isSuccess || user) {
-			// console.log("success")
-		}
-
-	}, [user, isError, isSuccess, message, dispatch])
 
 	const [visible, enable, disable] = useToggle(false)
 
@@ -90,7 +76,7 @@ function RegistrationForm() {
 					/>
 
 					<div className="flex justify-between">
-						<div className="links">							
+						<div className="links">
 							<Link href={'/auth/login'}><a style={{ marginLeft: "10px" }}>Уже есть аккаунт? Войти</a></Link>
 						</div>
 						<Button type="submit" aria-modal="true" themeType="contained" theme="primary" style={{ marginLeft: "10px" }}>Регистрация</Button>
@@ -98,7 +84,6 @@ function RegistrationForm() {
 
 				</Form>
 			</div>
-
 
 		</>
 	)
