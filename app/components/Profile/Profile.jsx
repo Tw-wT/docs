@@ -49,7 +49,7 @@ const Profile = () => {
 
 	return (
 		<>
-			<button onClick={animate} className={`w-72 rounded-lg p-3 ${scale ? "button_click" : ""}`} style={{ backgroundColor: "#ffffff" }}>
+			<button onClick={animate} className={`w-92-p rounded-lg p-3 ${scale ? "button_click" : ""}`} style={{ backgroundColor: "#ffffff" }}>
 				<div className="flex justify-between items-center">
 					<img
 						className="h-8 w-8"
@@ -60,7 +60,7 @@ const Profile = () => {
 					<KeyboardArrowDownSVGIcon className={`${rotate ? "rotateUp" : "rotateDown"}`} aria-setsize={"12"} style={{ transform: "scale(1.1)", fill: "black" }} />
 				</div>
 			</button>
-			<div className={`${menu ? "menu_opened" : "hidden"} flex flex-col mt-4 justify-between  p-5 z-10 fixed  w-72 rounded-lg `} style={{ minHeight: "150px", backgroundColor: "rgb(245 245 245)" }}>
+			<div className={`${menu ? "menu_opened" : "hidden"} flex flex-col mt-4 justify-between  p-5 z-10 fixed  w-72 rounded-lg  `} style={{ minHeight: "150px", backgroundColor: "rgb(239 239 239)" }}>
 				{menuItemsObj.map(item => (
 					<Link key={item.id} href={item.path}><button className={`w-64 rounded-lg p-3 ${scale ? "button_click" : ""}`} style={{ backgroundColor: "#ffffff" }}>{item.value}</button></Link>
 				))}

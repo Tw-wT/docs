@@ -1,9 +1,11 @@
 import { Form, TextField } from "@react-md/form"
 import { Button } from "@react-md/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { login, reset } from "../../features/auth/authSlice"
 import Link from "next/link"
+import { useSelector } from "react-redux"
+import  Router  from "next/router"
 
 const LoginPage = () => {
 	const dispatch = useDispatch()
@@ -15,12 +17,20 @@ const LoginPage = () => {
 
 	const { email, password } = formData
 
+	const { user, isSuccess } = useSelector((state) => state.auth)
+
 	const onChange = (e) => {
 		setFormData((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
 		}))
 	}
+
+	useEffect(() => {
+		if(user){
+			Router.push("/")
+		}
+	}, [isSuccess])
 
 	const onSubmit = (e) => {
 		e.preventDefault()

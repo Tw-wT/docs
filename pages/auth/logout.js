@@ -4,11 +4,13 @@ import { useDispatch } from "react-redux"
 import Router from "next/router"
 
 const Logout = () => {
-	const dispatch = useDispatch()
-	dispatch(logout())
-	dispatch(clearData())
-	dispatch(reset())
-	Router.push('/auth/login')
+	if (typeof window !== "undefined") {
+		const dispatch = useDispatch()
+		dispatch(logout())
+		dispatch(clearData())
+		dispatch(reset())
+		Router.push('/auth/login')
+	}
 
 	return null
 }

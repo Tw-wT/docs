@@ -13,23 +13,18 @@ const getArticles = async (groupId = null, departamentId = null) => {
 	const response = await instance.get(`${API_URL}article`, {
 		params: {
 			group_id: groupId ? groupId : null,
-			departament_id: departamentId ? departamentId : null
+			departament_id: departamentId || departamentId ===0 ? departamentId : null
 		}
 	})
 	return response.data
 }
 
 //* Получить отдельную запись
-const getArticle = async (id) => {
-	const response = await instance.get(`${API_URL}article/${id}`)
 
-	return response.data
-}
 
 const articlesService = {
 	create,
-	getArticles,
-	getArticle
+	getArticles
 }
 
 export default articlesService

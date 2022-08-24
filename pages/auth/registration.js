@@ -7,6 +7,7 @@ import { register, reset } from "../../features/auth/authSlice"
 import { useEffect } from "react"
 import Link from "next/link"
 import toast, { Toaster } from "react-hot-toast"
+import Router from "next/router"
 
 function RegistrationForm() {
 	const [formData, setFormData] = useState({
@@ -14,6 +15,14 @@ function RegistrationForm() {
 		email: '',
 		password: ''
 	})
+	const { user, isSuccess } = useSelector((state) => state.auth)
+
+
+	useEffect(() => {
+		if (user) {
+			Router .push("/")
+		}
+	}, [isSuccess])
 
 	const { name, email, password } = formData
 
@@ -42,8 +51,8 @@ function RegistrationForm() {
 
 	return (
 		<>
-			<div className="w-1/3" style={{ margin: '0 auto' }}>
-				<Form className="mt-10 "
+			<div className="w-1/2" style={{ margin: '0 auto' }}>
+				<Form className=""
 					onSubmit={onSubmit}
 				>
 					<h1 className="font-bold text-center mb-10 text-lg">Авторизация</h1>

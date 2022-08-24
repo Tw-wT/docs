@@ -63,6 +63,18 @@
   animation: fade 1s forwards;
 }
 
+.w-92-p {
+  width: 92%;
+}
+
+.modal {
+  animation: fade 2s ease;
+}
+
+.modal_wrapper {
+  animation: dropdown 1s ease;
+}
+
 @keyframes fade {
 
   0% {
@@ -97,7 +109,7 @@
 
 @keyframes dropdown {
   0% {
-    transform: translateY(-50%);
+    transform: translateY(-25%);
   }
 
   100% {

@@ -19,6 +19,15 @@ export const getDepartaments = createAsyncThunk('departaments', async (args, thu
 	}
 })
 
+export const createGroup = createAsyncThunk('group-article', async (groupData) => {
+	try {
+		return await departamentsService.createGroup(groupData)
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.msg) || error.message || error
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
 export const departamentsSlice = createSlice({
 	name: 'departaments',
 	initialState,
@@ -51,6 +60,13 @@ export const departamentsSlice = createSlice({
 				state.isError = true
 				state.message = action.payload
 			})
+			.addCase(createGroup.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(createGroup.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+			}) 
 	}
 })
 

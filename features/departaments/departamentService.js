@@ -6,8 +6,14 @@ const get = async () => {
 	return response.data
 }
 
+const createGroup = async (groupData) => {
+	const response = await instance.post(`group-article`, groupData)
+	return response.data
+}
+
 const departamentsService = {
-	get
+	get,
+	createGroup
 }
 
 export default departamentsService

@@ -20,14 +20,14 @@ export default function Home() {
   return (
     <>
       <LeftMenu />      
-      <Editor />
 
         {/* <Editor
           onSave={(editorData, title, description) =>
             onSaveHandler(editorData, title, description)
           }
         /> */}
-        
+
+      <Editor />
 
     </>
   )

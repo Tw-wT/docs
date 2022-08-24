@@ -21,7 +21,6 @@ export const register = createAsyncThunk('auth/register', async (user, thunkAPI)
 	try {
 		return await authService.register(user)
 	} catch (error) {
-		console.log(error)
 		const message = (error.response && error.response.data && error.response.data.msg) || error.message || error
 		return thunkAPI.rejectWithValue(message)
 	}
@@ -49,7 +48,9 @@ export const authSlice = createSlice({
 		},
 		logout: (state) => {
 			state.user = null
-			localStorage.removeItem('user')
+			if (typeof window !== "undefined") {
+				localStorage.removeItem('user')
+			}
 		}
 	},
 	extraReducers: (builder) => {
