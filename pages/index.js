@@ -1,9 +1,8 @@
 import Editor from '../app/components/Editor/Editor'
-import ArticlesList from "../app/components/ArticlesList/ArticlesList"
 import LeftMenu from "../app/components/LeftMenu/LeftMenu"
 
 export default function Home() {
-
+  
   const onSaveHandler = async (blogData, title, description) => {
     const toSaveData = {
       title,
@@ -15,19 +14,25 @@ export default function Home() {
     const result = {
       article: toSaveData
     }
+
+    console.log(result)
   }
 
   return (
     <>
-      <LeftMenu />      
+      <LeftMenu />
 
-        {/* <Editor
+      {/* <Editor
           onSave={(editorData, title, description) =>
             onSaveHandler(editorData, title, description)
           }
         /> */}
 
-      <Editor />
+      <Editor
+        onSave={(editorData, title, description) => 
+          onSaveHandler(editorData, title, description)
+        }
+      />
 
     </>
   )

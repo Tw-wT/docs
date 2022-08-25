@@ -2,15 +2,18 @@ import { useContext } from "react"
 import { useState } from "react"
 import { AddSVGIcon, ChevronRightSVGIcon } from "react-md"
 import { useDispatch, useSelector } from "react-redux"
-import { getArticles } from "../../../features/articles/articlesSlice"
+import { createArticle, getArticles } from "../../../features/articles/articlesSlice"
 import { getArticle, reset } from "../../../features/article/articleSlice"
 import { Context } from "../LeftMenu/Context"
+import { createGroup, getDepartaments } from "../../../features/departaments/departamentsSlice"
 
 const MiddleSection = ({ groups, departamentIndex }) => {
 	const [scale, setScale] = useState(false)
 	const [scaleArticle, setScaleArticle] = useState(false)
 	const [scaleAddButton, setScaleAddButton] = useState(false)
 	const [activeItemIndex, setActiveItemIndex] = useState()
+	const [activeInput, setActiveInput] = useState(false)
+	const [inputValue, setInputValue] = useState('')
 	const [showArticles, setShowArticles, showModal, setShowModal] = useContext(Context)
 	const dispatch = useDispatch()
 
@@ -18,13 +21,11 @@ const MiddleSection = ({ groups, departamentIndex }) => {
 	const { departaments } = useSelector(state => state.departaments)
 
 	const handleAddButton = (type) => {
-
 		switch (type) {
 			case "group":
 				setScale(true)
-				
 				setTimeout(() => setScale(false), 500)
-				setTimeout(() => setShowModal(true), 100)
+				setActiveInput(true)
 				break
 			case "article":
 				setScaleAddButton(true)
@@ -34,7 +35,6 @@ const MiddleSection = ({ groups, departamentIndex }) => {
 	}
 
 	const handleClickGroup = (groupIndex) => {
-
 		setShowArticles(true)
 		const groupId = departaments[departamentIndex].groups[groupIndex].id
 		const data = {
@@ -56,9 +56,30 @@ const MiddleSection = ({ groups, departamentIndex }) => {
 		setTimeout(() => setScaleArticle(false), 500)
 	}
 
+	const handleChangeInputValue = (e) => {
+		setInputValue(e.target.value)
+	}
+
+	const handleSubmitForm = (e) => {
+		e.preventDefault()
+		const departamentId = departaments[departamentIndex].id
+		const name = e.target[0].value
+		const data = {
+			departament_id: departamentId,
+			name: name
+		}
+		dispatch(createGroup(data)).then(() => {
+
+			dispatch(getDepartaments()).then(() => {
+				setActiveInput(false)
+				setInputValue("")
+			})
+		})
+	}
+
 	return (
 
-		<div className="p-6 w-1/2 " style={{ borderRightWidth: "1px" }}>
+		<div className="p-6 w-1/2" style={{ borderRightWidth: "1px" }}>
 			<div>
 				{!showArticles ?
 					<div>
@@ -79,15 +100,22 @@ const MiddleSection = ({ groups, departamentIndex }) => {
 								<AddSVGIcon />
 							</div>
 						</button>
-						{groups?.map((group, i) => (
-							<div onClick={() => handleClickGroup(i)} key={group.id} className="fadeAnimation flex">
-								<div className={`w-72 mt-2 rounded-lg p-3 cursor-pointer list_hover_whiteBG  flex justify-between `}>
-									<div>
-										{group.name}</div>
-									<ChevronRightSVGIcon />
+
+						{activeInput && <form className="fadeAnimation" onSubmit={handleSubmitForm} id="addGroup">
+							<input className="p-3 rounded-lg outline-none" style={{ border: "0px", width: "93%", backgroundColor: "rgb(246, 246, 246)"}} value={inputValue} placeholder="Введите название группы" onChange={handleChangeInputValue} />
+						</form>}
+						<div className="overflow-y-scroll" style={{ maxHeight: "550px" }}>
+							{groups?.map((group, i) => (
+								<div onClick={() => handleClickGroup(i)} key={group.id} className="fadeAnimation flex">
+									<div className={`w-72 mt-2 rounded-lg p-3 cursor-pointer list_hover_whiteBG  flex justify-between `}>
+										<div>
+											{group.name}</div>
+										<ChevronRightSVGIcon />
+									</div>
 								</div>
-							</div>
-						))}
+							))}
+						</div>
+
 						<div className="mt-10">
 							{articles ? <div className="overflow-y-scroll fadeAnimation" style={{ maxHeight: "610px" }}>
 								{articles.map((article, i) => (
@@ -125,8 +153,8 @@ const MiddleSection = ({ groups, departamentIndex }) => {
 						:
 						<div>ничего</div>
 				}
-				{activeItemIndex ? <div></div> : <div></div>}
 			</div>
+
 		</div>
 	)
 }

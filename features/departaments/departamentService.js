@@ -7,7 +7,7 @@ const get = async () => {
 }
 
 const createGroup = async (groupData) => {
-	const response = await instance.post(`group-article`, groupData)
+	const response = await instance.post(`api/v1/book/group-article`, groupData)
 	return response.data
 }
 
