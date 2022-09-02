@@ -16,11 +16,11 @@ export const createArticle = createAsyncThunk('articles/create', async (data, th
 	} catch (error) {
 		const message = (error.response && error.response.data && error.response.data.message) || error.message || error
 		const statusCode = error.response.status
-		const res = {
-			error: true,
+		const res = [
+			error = true,
 			message,
 			statusCode
-		}
+		]
 		return thunkAPI.rejectWithValue(res)
 	}
 })
@@ -80,7 +80,7 @@ export const articlesSlice = createSlice({
 			.addCase(getArticles.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = true
-				state.articles = action.payload
+				state.articles = action.payload.length !== 0 ? action.payload : null
 			})
 			.addCase(getArticles.rejected, (state, action) => {
 				state.isLoading = false

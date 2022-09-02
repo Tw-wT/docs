@@ -8,8 +8,21 @@ const getArticle = async (id) => {
 	return response.data
 }
 
+const deleteArticle = async(id) => {
+	const response = await instance.delete(`${API_URL}article/${id}`)
+	return response.data
+}
+
+const editArticleById = async(id, article) => {
+	const response = await instance.put(`${API_URL}article/${id}`, article)
+
+	return response.data
+}
+
 const articleService = {
-	getArticle
+	getArticle,
+	deleteArticle,
+	editArticleById
 }
 
 export default articleService

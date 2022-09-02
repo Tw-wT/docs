@@ -1,9 +1,8 @@
-import { Context } from "../LeftMenu/Context"
+import { Context } from "../MainWrapper/Context"
 import { useContext } from "react"
 
 const Modal = ({ children }) => {
 	const [showArticles, setShowArticles, showModal, setShowModal] = useContext(Context)
-	console.log(showModal)
 	return (
 		<>
 			{showModal ?

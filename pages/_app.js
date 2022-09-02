@@ -10,13 +10,12 @@ import { injectStore } from "../app/store/axios/instance"
 function MyApp({ Component, pageProps }) {
   //inject store in axios
   injectStore(store)
-  
+
   return (
     <Provider store={store}>
       <MainLayout>
         <Configuration>
           <Component {...pageProps} />
-          
         </Configuration>
       </MainLayout>
     </Provider>

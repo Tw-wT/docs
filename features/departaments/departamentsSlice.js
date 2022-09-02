@@ -19,7 +19,8 @@ export const getDepartaments = createAsyncThunk('departaments', async (args, thu
 	}
 })
 
-export const createGroup = createAsyncThunk('group-article', async (groupData) => {
+//* Создание группы
+export const createGroup = createAsyncThunk('group-article', async (groupData, thunkAPI) => {
 	try {
 		return await departamentsService.createGroup(groupData)
 	} catch (error) {
@@ -27,6 +28,26 @@ export const createGroup = createAsyncThunk('group-article', async (groupData) =
 		return thunkAPI.rejectWithValue(message)
 	}
 })
+
+//* Изменение группы
+export const changeGroup = createAsyncThunk('group-article/edit', async (res, thunkAPI) => {
+	try {
+		return await departamentsService.changeGroup(res.id, res.data)
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.msg) || error.message || error
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
+export const deleteGroup = createAsyncThunk('group-article/delete', async(id, thunkAPI) => {
+	try {
+		return await departamentsService.deleteGroup(id)
+	} catch (error) {
+		const message = (error.response && error.response.data && error.response.data.msg) || error.message || error
+		return thunkAPI.rejectWithValue(message)
+	}
+})
+
 
 export const departamentsSlice = createSlice({
 	name: 'departaments',
@@ -40,7 +61,9 @@ export const departamentsSlice = createSlice({
 		},
 		clearData: (state) => {
 			state.isLoading = false
-			state.isSuccess = true
+			state.isSuccess = false
+			state.isError = false
+			state.message = ''
 			state.departaments = null
 		}
 	},
@@ -66,7 +89,31 @@ export const departamentsSlice = createSlice({
 			.addCase(createGroup.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isSuccess = true
-			}) 
+			})
+			.addCase(changeGroup.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(changeGroup.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isSuccess = true
+			})
+			.addCase(changeGroup.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.message = action.payload
+			})
+			.addCase(deleteGroup.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(deleteGroup.fulfilled, (state) => {
+				state.isLoading = false
+				state.isSuccess = true
+			})
+			.addCase(deleteGroup.rejected, (state, action) => {
+				state.isLoading = false
+				state.isError = true
+				state.message = action.payload
+			})
 	}
 })
 
