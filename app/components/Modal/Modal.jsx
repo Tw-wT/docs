@@ -1,4 +1,4 @@
-import { Context } from "../MainWrapper/Context"
+import { Context } from "../Context/Context"
 import { useContext } from "react"
 
 const Modal = ({ children }) => {

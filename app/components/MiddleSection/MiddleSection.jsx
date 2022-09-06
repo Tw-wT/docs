@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getArticles } from "../../../features/articles/articlesSlice"
-import { Context } from "../MainWrapper/Context"
+import { Context } from "../Context/Context"
 import { getDepartaments } from "../../../features/departaments/departamentsSlice"
 import Groups from "./Groups/Groups"
 import Articles from "./Articles/Articles"

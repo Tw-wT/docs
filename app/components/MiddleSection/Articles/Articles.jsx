@@ -6,15 +6,16 @@ import { toast } from "react-toastify"
 import { getArticle, reset } from "../../../../features/article/articleSlice"
 import Button from "../../../UI/Button"
 import Title from "../../../UI/Title"
-import { Context } from "../../MainWrapper/Context"
+import { Context } from "../../Context/Context"
 
 
 const Articles = ({ }) => {
 	const [activeArticleIndex, setActiveArticleIndex] = useState()
 	const [scaleArticle, setScaleArticle] = useState(false)
 
-	const { editorContext } = useContext(Context)
+	const { editorContext, articleContext } = useContext(Context)
 	const [modeCreate, setModeCreate] = editorContext
+	const [showArticles] = articleContext
 
 	const { articles, isLoading } = useSelector(state => state.articles)
 	const { article } = useSelector(state => state.article)
@@ -41,15 +42,31 @@ const Articles = ({ }) => {
 		<>
 			<Toaster />
 			<Title text="Записи" />
-			<Button onClickHandler={() => setModeCreate(true)} text="Добавить запись" rightIcon={<AddSVGIcon />} />
-			<div className="overflow-y-scroll fadeAnimation mt-5" style={{ maxHeight: "35%" }} >
+			<Button classNames="w-92-p" onClickHandler={() => setModeCreate(true)} text="Добавить запись" rightIcon={<AddSVGIcon />} />
+			<div className="overflow-y-scroll fadeAnimation mt-5" style={!showArticles ? { maxHeight: "35%" } : { maxHeight: "80%" }} >
 				{
 					!isLoading ?
 						articles ?
 							articles.map((article, i) => (
-								<div onClick={() => handleClickArticle(i)} key={article.articleId} className={`p-3 flex flex-col cursor-pointer mb-2 rounded-lg fadeAnimation list_hover_whiteBG ${scaleArticle && activeArticleIndex === i ? "button_click" : ""}`} >
-									<div className="text-lg font-bold">{article.title}</div>
-									<div className="truncate">{article.description}</div>
+								<div onClick={() => handleClickArticle(i)} key={article.articleId} className={`p-3 flex flex-col gap-3 cursor-pointer mb-2 rounded-lg fadeAnimation list_hover_whiteBG ${scaleArticle && activeArticleIndex === i ? "button_click" : ""}`} >
+									<div>
+
+										<div className="text-lg font-bold">{article.title}</div>
+										<div className="truncate">{article.description}</div>
+									</div>
+									<div className="flex justify-between">
+										<div className={`flex gap-2 ${article?.tags?.length > 3 ? "w-4/5" : ""}`}>
+											{article?.tags?.length != 0 &&
+												article?.tags?.map((tag, index) => (
+													index < 3 &&
+													<div className={`p-1 pr-2 pl-2 rounded-md truncate text-center ${article?.tags?.length > 3 ? "w-2/5" : ""}`} style={{ backgroundColor: "rgb(239, 239, 239)" }}>{tag}</div>
+												))
+											}
+										</div>
+										{article?.tags?.length > 3 &&
+											<div className="p-1 pr-2 pl-2 rounded-md" style={{ backgroundColor: "rgb(239, 239, 239)" }}>{`+${article?.tags?.length - 3}`}</div>
+										}
+									</div>
 								</div>
 							))
 							: <span className="fadeAnimation">Записей пока нет</span>

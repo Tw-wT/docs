@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Context } from "../MainWrapper/Context"
+import { Context } from "../Context/Context"
 import { ChevronRightSVGIcon } from "react-md"
 import Loader from "../Loader/Loader"
 import { clear } from "../../../features/article/articleSlice"

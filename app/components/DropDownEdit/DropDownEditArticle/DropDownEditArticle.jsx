@@ -1,13 +1,13 @@
 import { useContext, useEffect } from "react"
 import { useState } from "react"
 import { DeleteSVGIcon, EditSVGIcon, MoreHorizSVGIcon } from "react-md"
-import { Context } from "../../MainWrapper/Context"
+import { Context } from "../../Context/Context"
 import { useDispatch } from "react-redux"
 import { deleteArticle } from "../../../../features/article/articleSlice"
 import { useSelector } from "react-redux"
 import { getArticles } from "../../../../features/articles/articlesSlice"
 
-const DropDownEdit = ({ type, fill = "black" }) => {
+const DropDownEditArticle = ({ type, fill = "black" }) => {
 	const [buttonClick, setButtonClick] = useState(false)
 	const [menuActive, setMenuActive] = useState(false)
 	const { departContext, editorContext, groupsContext } = useContext(Context)
@@ -82,4 +82,4 @@ const DropDownEdit = ({ type, fill = "black" }) => {
 	)
 }
 
-export default DropDownEdit
+export default DropDownEditArticle

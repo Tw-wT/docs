@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { EditSVGIcon, DeleteSVGIcon, MoreHorizSVGIcon } from "@react-md/material-icons"
 import { useContext } from "react"
-import { Context } from "../../MainWrapper/Context"
+import { Context } from "../../Context/Context"
 import { useDispatch, useSelector } from "react-redux"
 import { deleteGroup, getDepartaments } from "../../../../features/departaments/departamentsSlice"
 

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 import Link from "next/link"
 
-const Profile = () => {
+const ProfileButton = () => {
 	const [scale, setScale] = useState(false)
 	const [rotate, setRotate] = useState(false)
 	const [menu, setProfileMenu] = useState(false)
@@ -50,7 +50,7 @@ const Profile = () => {
 			{isLoading ?
 				<div className="w-92-p rounded-lg p-3 bg-white">
 					<div className="animate-pulse items-center flex space-x-4">
-						<div className="rounded-sm h-8 w-8" style={{ backgroundColor: "rgb(215 215 215)"}}></div>
+						<div className="rounded-sm h-8 w-8" style={{ backgroundColor: "rgb(215 215 215)" }}></div>
 						<div className="flex-1 items-center space-y-6 py-1">
 							<div className="h-8 rounded" style={{ backgroundColor: "rgb(215 215 215)" }}></div>
 						</div>
@@ -62,7 +62,7 @@ const Profile = () => {
 						<div className="flex justify-between items-center">
 							<img
 								className="h-8 w-8 rounded-sm"
-								src={`http://192.168.0.203:8787/${user ? user.foto_url : "upload/img-profile/default.jpg"}`}
+								src={`http://192.168.0.203:8787${user ? user.foto_url : "/upload/img-profile/default.jpg"}`}
 								alt="Фото пользователя"
 							/>
 							<span className="font-semibold">{user ? user.name : "Имя пользователя"}</span>
@@ -80,4 +80,4 @@ const Profile = () => {
 	)
 }
 
-export default Profile
+export default ProfileButton

@@ -6,7 +6,7 @@ import { changeGroup, createGroup, getDepartaments } from "../../../../features/
 import Button from "../../../UI/Button"
 import Title from "../../../UI/Title"
 import DropdownEditGroup from "../../DropDownEdit/DropDownEditGroup/DropDownGroup"
-import { Context } from "../../MainWrapper/Context"
+import { Context } from "../../Context/Context"
 
 const Groups = ({ }) => {
 	const dispatch = useDispatch()
@@ -89,7 +89,7 @@ const Groups = ({ }) => {
 	return (
 		<>
 			<Title text="Группы" />
-			<Button onClickHandler={() => setActiveInput(true)} text="Добавить группу" rightIcon={<AddSVGIcon />} />
+			<Button classNames="w-92-p" onClickHandler={() => setActiveInput(true)} text="Добавить группу" rightIcon={<AddSVGIcon />} />
 			{activeInput && <form className="fadeAnimation" onSubmit={handleSubmitForm} id="addGroup">
 				<input autoFocus onBlur={onBlurInput} className="p-3 mt-3 rounded-lg outline-none" style={{ border: "0px", width: "93%", backgroundColor: "rgb(246, 246, 246)" }} value={inputValue} placeholder="Введите название группы" onChange={handleChangeInputValue} />
 			</form>}
